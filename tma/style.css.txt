@@ -1,0 +1,58 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--tg-theme-bg-color, #f4f4f4); /* Telegram Theme Color */
+    color: var(--tg-theme-text-color, #333);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    background-color: var(--tg-theme-secondary-bg-color, #fff);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+h1 {
+    color: var(--tg-theme-text-color, #007AFF);
+}
+
+#coin-count {
+    font-weight: bold;
+    color: #FFC107; /* Coins color */
+    font-size: 1.2em;
+}
+
+button {
+    background-color: var(--tg-theme-button-color, #007AFF);
+    color: var(--tg-theme-button-text-color, #fff);
+    border: none;
+    padding: 12px 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1em;
+    transition: opacity 0.3s;
+}
+
+button:hover:not(:disabled) {
+    opacity: 0.9;
+}
+
+button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+.info {
+    margin-top: 15px;
+    color: var(--tg-theme-hint-color, #666);
+}
