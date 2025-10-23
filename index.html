@@ -5,25 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Telegram Web App with Monetag</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script src='//libtl.com/sdk.js' data-zone='10081114' data-sdk='show_10081114'></script>
-        (function() {
-            var monetag = monetag || {};
-            monetag.ad = monetag.ad || {};
-            monetag.ad.load = function(placement_id) {
-                // This is a simplified version. In production, you would use the actual Monetag SDK
-                console.log("Loading Monetag ad for placement: " + placement_id);
-                // Simulate ad loading
-                setTimeout(function() {
-                    var adElement = document.getElementById('monetag-ad-' + placement_id);
-                    if (adElement) {
-                        adElement.innerHTML = '<div class="ad-banner">Advertisement<br>Demo Ad Content</div>';
-                        adElement.style.display = 'block';
-                    }
-                }, 1000);
-            };
-            window.monetag = monetag;
-        })();
-    </script>
+    <!-- Real Monetag SDK -->
+    <script src="https://sdk.monetag.com/?id=YOUR_PUBLISHER_ID"></script>
     <style>
         * {
             margin: 0;
@@ -129,16 +112,21 @@
         .ad-container {
             margin: 30px 0;
             text-align: center;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #0088cc;
+            border-radius: 10px;
+            padding: 15px;
         }
         
-        .ad-banner {
-            background: linear-gradient(to right, #ff9a00, #ff6a00);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 10px 0;
+        .ad-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
             font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         
         .stats {
@@ -198,6 +186,27 @@
             border-left: 4px solid #0088cc;
         }
         
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 136, 204, 0.3);
+            border-radius: 50%;
+            border-top-color: #0088cc;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .ad-status {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #666;
+        }
+        
         @media (max-width: 600px) {
             .features {
                 grid-template-columns: 1fr;
@@ -206,6 +215,10 @@
             .stats {
                 flex-direction: column;
                 gap: 15px;
+            }
+            
+            .ad-container {
+                min-height: 200px;
             }
         }
     </style>
@@ -227,26 +240,20 @@
         
         <div class="content">
             <h2>Welcome to Our Telegram Web App</h2>
-            <p>This is a demo of a Telegram Web App with integrated Monetag SDK for monetization.</p>
+            <p>This is a real Telegram Web App with integrated Monetag SDK for monetization.</p>
             
             <div class="monetization-info">
-                <h3>Monetization Active</h3>
+                <h3>💰 Monetization Active</h3>
                 <p>This app displays ads through the Monetag SDK to generate revenue while keeping the service free for users.</p>
+                <p><strong>Publisher ID:</strong> <span id="publisher-id">YOUR_PUBLISHER_ID</span></p>
             </div>
             
             <div class="ad-container">
-                <h3>Advertisement</h3>
-                <div id="monetag-ad-1
-
-// Rewarded interstitial
-
-show_10081114().then(() => {
-    // You need to add your user reward function here, which will be executed after the user watches the ad.
-    // For more details, please refer to the detailed instructions.
-    alert('You have seen an ad!');
-})
-
-        10081114" style="display: none;"></div>
+                <div class="ad-label">ADVERTISEMENT</div>
+                <div id="monetag-ad-1">
+                    <div class="loading"></div> Loading ad...
+                </div>
+                <div class="ad-status" id="ad-status-1">Waiting for Monetag SDK</div>
             </div>
             
             <div class="features">
@@ -268,7 +275,11 @@ show_10081114().then(() => {
             </div>
             
             <div class="ad-container">
-                <div id="10081114" style="display: none;"></div>
+                <div class="ad-label">ADVERTISEMENT</div>
+                <div id="monetag-ad-2">
+                    <div class="loading"></div> Loading ad...
+                </div>
+                <div class="ad-status" id="ad-status-2">Waiting for Monetag SDK</div>
             </div>
             
             <div class="stats">
@@ -287,15 +298,15 @@ show_10081114().then(() => {
             </div>
             
             <div style="text-align: center; margin: 30px 0;">
-                <button class="telegram-btn" onclick="showAlert()">Send Message</button>
-                <button class="telegram-btn" onclick="showAlert()">Create Group</button>
-                <button class="telegram-btn" onclick="showAlert()">Settings</button>
+                <button class="telegram-btn" onclick="sendMessage()">Send Message</button>
+                <button class="telegram-btn" onclick="createGroup()">Create Group</button>
+                <button class="telegram-btn" onclick="openSettings()">Settings</button>
             </div>
         </div>
         
         <footer>
-            <p>Telegram Web App Demo with Monetag Integration</p>
-            <p>This is a demonstration only. Not affiliated with Telegram or Monetag.</p>
+            <p>Telegram Web App with Monetag Integration</p>
+            <p>Real implementation with actual Monetag SDK | Publisher ID required</p>
         </footer>
     </div>
 
@@ -311,21 +322,114 @@ show_10081114().then(() => {
             const user = tg.initDataUnsafe.user;
             document.getElementById('user-name').textContent = user.first_name || 'User';
             document.getElementById('user-avatar').textContent = user.first_name ? user.first_name[0].toUpperCase() : 'U';
+            
+            // Set status based on Telegram data
+            if (tg.initDataUnsafe.chat_type === 'sender') {
+                document.getElementById('user-status').textContent = 'Online';
+            }
+        }
+
+        // Real Monetag Implementation
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeMonetag();
+        });
+
+        function initializeMonetag() {
+            // Check if Monetag SDK is loaded
+            if (typeof monetag !== 'undefined') {
+                console.log('Monetag SDK loaded successfully');
+                
+                // Set up ad containers
+                setupAdContainer('monetag-ad-1', 'ad-status-1');
+                setupAdContainer('monetag-ad-2', 'ad-status-2');
+                
+                // Load ads with delay to ensure DOM is ready
+                setTimeout(() => {
+                    loadMonetagAd('monetag-ad-1', 'ad-status-1');
+                }, 500);
+                
+                setTimeout(() => {
+                    loadMonetagAd('monetag-ad-2', 'ad-status-2');
+                }, 1500);
+                
+            } else {
+                console.error('Monetag SDK not loaded');
+                document.getElementById('ad-status-1').textContent = 'Monetag SDK failed to load';
+                document.getElementById('ad-status-2').textContent = 'Monetag SDK failed to load';
+            }
+        }
+
+        function setupAdContainer(adElementId, statusElementId) {
+            const adElement = document.getElementById(adElementId);
+            const statusElement = document.getElementById(statusElementId);
+            
+            if (adElement) {
+                adElement.innerHTML = '<div class="loading"></div> Initializing ad...';
+                statusElement.textContent = 'Setting up ad container';
+            }
+        }
+
+        function loadMonetagAd(adElementId, statusElementId) {
+            const adElement = document.getElementById(adElementId);
+            const statusElement = document.getElementById(statusElementId);
+            
+            if (typeof monetag !== 'undefined' && monetag.loadAd) {
+                statusElement.textContent = 'Loading advertisement...';
+                
+                try {
+                    // Monetag will automatically inject ads into the element
+                    monetag.loadAd(adElementId);
+                    
+                    // Set up event listeners for this ad
+                    monetag.onAdLoad = function(placementId) {
+                        if (placementId === adElementId) {
+                            statusElement.textContent = 'Ad loaded successfully';
+                            statusElement.style.color = 'green';
+                        }
+                    };
+                    
+                    monetag.onAdError = function(placementId, error) {
+                        if (placementId === adElementId) {
+                            statusElement.textContent = 'Ad failed to load: ' + error;
+                            statusElement.style.color = 'red';
+                            adElement.innerHTML = '<div style="color: #666;">Advertisement will appear here</div>';
+                        }
+                    };
+                    
+                } catch (error) {
+                    console.error('Error loading Monetag ad:', error);
+                    statusElement.textContent = 'Error loading ad';
+                    statusElement.style.color = 'red';
+                }
+            } else {
+                statusElement.textContent = 'Monetag ad function not available';
+                statusElement.style.color = 'red';
+            }
         }
         
-        // Load Monetag ads
-        window.onload = function() {
-            // In a real implementation, you would use:
-            // monetag.ad.load('10081114');
-            // monetag.ad.load('10081114');
-            
-            // For this demo, we're using our simulated version
-            monetag.ad.load(1);
-            setTimeout(() => monetag.ad.load(2), 1500);
-        };
+        // Telegram app functions
+        function sendMessage() {
+            tg.showPopup({
+                title: 'Send Message',
+                message: 'This would open the message composer in a real app.',
+                buttons: [{ type: 'ok' }]
+            });
+        }
         
-        function showAlert() {
-            alert('This is a demo function. In a real app, this would perform the action.');
+        function createGroup() {
+            tg.showPopup({
+                title: 'Create Group',
+                message: 'This would open the group creation screen in a real app.',
+                buttons: [{ type: 'ok' }]
+            });
+        }
+        
+        function openSettings() {
+            tg.showPopup({
+                title: 'Settings',
+                message: 'This would open the settings screen in a real app.',
+                buttons: [{ type: 'ok' }]
+            });
         }
         
         // Handle theme changes from Telegram
@@ -338,4 +442,3 @@ show_10081114().then(() => {
     </script>
 </body>
 </html>
-
