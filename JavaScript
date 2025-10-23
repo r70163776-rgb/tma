@@ -1,0 +1,35 @@
+
+// ads.js
+
+// Load Monetag ad dynamically (for Telegram WebApp)
+function loadMonetagAd() {
+  const adDiv = document.getElementById("adBanner");
+
+  // Create iframe to host the Monetag ad
+  const iframe = document.createElement("iframe");
+  iframe.src = "https://your-monetag-ad-zone-url"; // ✅ replace with your ad zone URL
+  iframe.width = "100%";
+  iframe.height = "90";
+  iframe.style.border = "none";
+  iframe.style.borderRadius = "12px";
+
+  adDiv.innerHTML = ""; // Clear placeholder
+  adDiv.appendChild(iframe);
+}
+
+// Optional: Simulate AdMob behavior
+function showAdmobStyleAd() {
+  const adDiv = document.getElementById("adBanner");
+  adDiv.innerHTML = `
+    <div style="background:#fff;padding:10px;border:1px solid #ddd;border-radius:12px;">
+      <strong>Sponsored</strong><br>
+      <em>AdMob-style banner (Monetag ad loaded)</em>
+    </div>
+  `;
+  loadMonetagAd();
+}
+
+// Auto-run when Telegram Mini App opens
+document.addEventListener("DOMContentLoaded", () => {
+  showAdmobStyleAd();
+});
