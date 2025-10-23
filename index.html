@@ -236,7 +236,17 @@
             
             <div class="ad-container">
                 <h3>Advertisement</h3>
-                <div id="monetag-ad-1" style="display: none;"></div>
+                <div id="monetag-ad-1
+
+// Rewarded interstitial
+
+show_10081114().then(() => {
+    // You need to add your user reward function here, which will be executed after the user watches the ad.
+    // For more details, please refer to the detailed instructions.
+    alert('You have seen an ad!');
+})
+
+        10081114" style="display: none;"></div>
             </div>
             
             <div class="features">
@@ -258,7 +268,7 @@
             </div>
             
             <div class="ad-container">
-                <div id="monetag-ad-2" style="display: none;"></div>
+                <div id="10081114" style="display: none;"></div>
             </div>
             
             <div class="stats">
@@ -306,8 +316,8 @@
         // Load Monetag ads
         window.onload = function() {
             // In a real implementation, you would use:
-            // monetag.ad.load('your-placement-id-1');
-            // monetag.ad.load('your-placement-id-2');
+            // monetag.ad.load('10081114');
+            // monetag.ad.load('10081114');
             
             // For this demo, we're using our simulated version
             monetag.ad.load(1);
@@ -328,3 +338,4 @@
     </script>
 </body>
 </html>
+
