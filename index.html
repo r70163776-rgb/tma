@@ -6,7 +6,7 @@
   <title>Telegram Mini App</title>
 
   <!-- ✅ Monetag Ad Script -->
-  <script async src="https://your-monetag-zone-url.js"></script>
+  <script src='//libtl.com/sdk.js' data-zone='10081114' data-sdk='show_10081114'></script>
   <!-- replace "your-monetag-zone-url.js" with your actual Monetag script URL -->
   
   <style>
@@ -29,9 +29,31 @@
     <h2>Welcome to my Telegram Mini App!</h2>
 
     <!-- Ad container -->
-    <div id="adBanner">Loading Ad...</div>
-  </div>
+    <div id="
+
+// Rewarded interstitial
+
+show_10081114().then(() => {
+    // You need to add your user reward function here, which will be executed after the user watches the ad.
+    // For more details, please refer to the detailed instructions.
+    alert('You have seen an ad!');
+})
+
+
+
+// Rewarded Popup
+
+show_10081114('pop').then(() => {
+    // user watch ad till the end or close it in interstitial format
+    // your code to reward user for rewarded format
+}).catch(e => {
+    // user get error during playing ad
+    // do nothing or whatever you want
+})
+
+        
 
   <script src="ads.js"></script>
 </body>
 </html>
+
